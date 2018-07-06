@@ -65,15 +65,13 @@ between(N, M, N) :- N =< M.
 between(N, M, K) :- N < M, N1 is N+1, between(N1, M, K).
 
 %rowWin(+Table, +Player)
-rowWin(T, P) :- between(0, 2, Row), winInRow(T, P, Row).
-winInRow(T, P, Row) :- between(0, 2, Col), winInRowOrCol(T, P, Row, Col).
-winInRowOrCol(T, P, Row, Col) :- findall(count, member(cell(Row, Col, P), T), S),
+rowWin(T, P) :- between(0, 2, Row), winInRowOrCol(T, P, Row, _).
+winInRowOrCol(T, P, Row, Col) :- (P = o; P = x), findall(count, member(cell(Row, Col, P), T), S),
 	length(S, 3),
-	member(cell(Row, Col, P), T). %this is needed to set P as x or o
+	member(cell(Row, Col, P), T), !. %this is needed to set P as x or o
 	
 %colWin(+Table, +Player)
-colWin(T, P) :- between(0, 2, Col), winInCol(T, P, Col).
-winInCol(T, P, Col) :- between(0, 2, Row), winInRowOrCol(T, P, Row, Col).
+colWin(T, P) :- between(0, 2, Col), winInRowOrCol(T, P, _, Col).
 
 %diagWin(+Table, +Player)
 diagWin(T, P) :- member(cell(1, 1, P), T), (winInDiag1(T, P) ; winInDiag2(T, P)).
@@ -83,8 +81,8 @@ winInDiag2(T, P) :- findall(count, (between(0, 2, Row), Col is 2-Row, member(cel
 
 %game(@Table,@Player,-Result,-TableList)
 %example: game([], x, R, TL).
-game(T, _, win(P), []) :- result(T, win(P)), !.
-game(T, _, even, []) :- result(T, even), !.
+game(Tab, _, win(P), [Tab]) :- result(Tab, win(P)), !.
+game(Tab, _, even, [Tab]) :- result(Tab, even), !.
 game(Tab, P, R, [Tab|T]) :- next(Tab, P, R1, N), otherP(P, P1), game(N, P1, R, T).
 otherP(x, o).
 otherP(o, x). 
