@@ -14,7 +14,7 @@ search_anytwo(X,[_|T]):- search_anytwo(X,T).
 
 % size(List,Size)
 % Size will contain the number of elements in List
-% it is not fully relational
+% it is not fully relational (loops forever when calculating list from size)
 size([],0).
 size([_|T],M) :- size(T,N), M is N+1.
 
@@ -55,11 +55,12 @@ bigger(X, Y) :- X>Y.
 % sublist(List1,List2)
 % List1 should be a subset of List2
 % example: sublist([1,2],[5,3,2,1]).
-sublist([], L).
+sublist([], _).
 sublist([X|Xs],Y):- search(X, Y), sublist(Xs,Y).
 
 % seq(N,List)
 % example: seq(5,[0,0,0,0,0]).
+ %it is not fully relational (can't find N from List)
 seq(0,[]).
 seq(N,[0|T]):- N > 0, N2 is N-1, seq(N2,T).
 
