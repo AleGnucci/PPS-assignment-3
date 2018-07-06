@@ -83,6 +83,7 @@ inv([H|T], LI) :- inv(T, LI2), append(LI2, [H], LI).
 % double(List,List)
 % suggestion: remember predicate append/3
 % example: double([1,2,3],[1,2,3,1,2,3]).
+double(L1, L2) :- append(L1, L1, L2).
 
 % times(List,N,List)
 % example: times([1,2,3],3,[1,2,3,1,2,3,1,2,3]).
