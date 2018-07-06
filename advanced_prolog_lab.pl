@@ -66,6 +66,10 @@ between(N, M, K) :- N < M, N1 is N+1, between(N1, M, K).
 
 %rowWin(+Table, +Player)
 rowWin(T, P) :- between(0, 2, Row), winInRowOrCol(T, P, Row, _).
+
+%winInRowOrCol(+Table, -P, +Row, +Col)
+%to search for a win in a row, set Row as a ground term, leaving Col unbounded;
+%to search for a win in a column, do the opposite
 winInRowOrCol(T, P, Row, Col) :- (P = o; P = x), findall(count, member(cell(Row, Col, P), T), S),
 	length(S, 3),
 	member(cell(Row, Col, P), T), !. %this is needed to set P as x or o
@@ -75,7 +79,9 @@ colWin(T, P) :- between(0, 2, Col), winInRowOrCol(T, P, _, Col).
 
 %diagWin(+Table, +Player)
 diagWin(T, P) :- member(cell(1, 1, P), T), (winInDiag1(T, P) ; winInDiag2(T, P)).
+%winInDiag1(+Table, +Player)
 winInDiag1(T, P) :- findall(count, member(cell(Num, Num, P), T), S), length(S, 3).
+%winInDiag1(+Table, +Player)
 winInDiag2(T, P) :- findall(count, (between(0, 2, Row), Col is 2-Row, member(cell(Row, Col, P), T)), S), 
 	length(S, 3).
 
@@ -84,5 +90,6 @@ winInDiag2(T, P) :- findall(count, (between(0, 2, Row), Col is 2-Row, member(cel
 game(Tab, _, win(P), [Tab]) :- result(Tab, win(P)), !.
 game(Tab, _, even, [Tab]) :- result(Tab, even), !.
 game(Tab, P, R, [Tab|T]) :- next(Tab, P, R1, N), otherP(P, P1), game(N, P1, R, T).
+%other(@CurrentPlayer, @NextPlayer)
 otherP(x, o).
 otherP(o, x). 
