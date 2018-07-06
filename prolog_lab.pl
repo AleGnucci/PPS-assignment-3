@@ -36,11 +36,12 @@ sum([H1, H2 | T], X):- sum(T, X2), X is H1+H2+X2.
 max(L,A) :- max(L,0,A).
 %max(List,TempMax,Max)
 max([], S, S).
-max([X|Xs],S,A) :- X>=S, !, max(Xs,X,A).
-max([X|Xs],S,A) :- max(Xs,S,A).
+max([X|Xs],S,A) :- X>=S, max(Xs,X,A).
+max([X|Xs],S,A) :- X<S, max(Xs,S,A).
 
 % same(List1,List2)
 % are the two lists the same?
+% this predicate is fully relational
 same([],[]).
 same([X|Xs],[X|Ys]):- same(Xs,Ys).
 
