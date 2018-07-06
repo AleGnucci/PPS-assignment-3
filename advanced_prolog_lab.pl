@@ -45,6 +45,7 @@ allreaching2(G, N, L) :- setof(N1, L1^anypath(G, N, N1, L1), L), !. %setof elimi
 
 %TicTacToe
 %next(@Table,@Player,-Result,-NewTable)
+%example: next([cell(1, 1, x)], o, R, N).
 next(T, P, R, N) :- between(0, 2, Row), 
 	between(0, 2, Col), 
 	not member(cell(Row, Col, _), T), 
@@ -80,6 +81,7 @@ winInDiag2(T, P) :- findall(count, (between(0, 2, Row), Col is 2-Row, member(cel
 	length(S, 3).
 
 %game(@Table,@Player,-Result,-TableList)
+%example: game([], x, R, TL).
 game(T, _, win(P), []) :- result(T, win(P)), !.
 game(T, _, even, []) :- result(T, even), !.
 game(Tab, P, R, [Tab|T]) :- next(Tab, P, R1, N), otherP(P, P1), game(N, P1, R, T).
