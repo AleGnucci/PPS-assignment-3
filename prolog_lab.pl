@@ -92,3 +92,5 @@ times(L1, N, L2) :- M is N-1, times(L1, M, L3), append(L1, L3, L2).
 
 % proj(List,List)
 % example: proj([[1,2],[3,4],[5,6]],[1,3,5]).
+proj([[H|T]], [H]).
+proj([[H|T1]|T2], [H|T3]) :- proj(T2, T3).
