@@ -14,27 +14,21 @@ search_anytwo(X,[_|T]):- search_anytwo(X,T).
 
 % size(List,Size)
 % Size will contain the number of elements in List
+% it is not fully relational
 size([],0).
 size([_|T],M) :- size(T,N), M is N+1.
 
-%size con peano
+% size(List,Size)
+% Size will contain the number of elements in List,
+% written using notation zero, s(zero), s(s(zero))..
+% it is fully relational
 sizeP([],zero).
 sizeP([_|T],s(N)) :- sizeP(T,N).
 
 % sum(List,Sum)
 sum([], 0).
 sum([X], X).
-sum([H1, H2], X) :- X is H1+H2.
-sum([H1, H2 | T], X):- X1 is H1+H2, sum(T, X2) , X is X1+X2.
-
-% average(List,Average)
-% it uses average(List,Count,Sum,Average)
-average(List,A) :- average(List,0,0,A).
-average([],C,S,A) :- A is S/C.
-average([X|Xs],C,S,A) :-
-C2 is C+1,
-S2 is S+X,
-average(Xs,C2,S2,A).
+sum([H1, H2 | T], X):- sum(T, X2), X is H1+H2+X2.
 
 % max(List,Max)
 % Max is the biggest element in List
