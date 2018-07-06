@@ -74,3 +74,18 @@ seqR(N, [N|T]) :- M is N-1, seqR(M, T).
 seqR2(N, L) :- seqR2(N, [], L).
 seqR2(0, L, [0|L]) :- !.
 seqR2(N, R, L) :- N1 is N-1, seqR2(N1, [N|R], L).
+
+% inv(List,List)
+% example: inv([1,2,3],[3,2,1]).
+inv([X], [X]).
+inv([H|T], LI) :- inv(T, LI2), append(LI2, [H], LI).
+
+% double(List,List)
+% suggestion: remember predicate append/3
+% example: double([1,2,3],[1,2,3,1,2,3]).
+
+% times(List,N,List)
+% example: times([1,2,3],3,[1,2,3,1,2,3,1,2,3]).
+
+% proj(List,List)
+% example: proj([[1,2],[3,4],[5,6]],[1,3,5]).
