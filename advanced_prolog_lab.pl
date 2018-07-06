@@ -60,6 +60,7 @@ result(T, even) :- length(T, 9), !.
 result(T, nothing).
 
 %between(+Low, +High, -Value)
+%low and high are both inclusive
 between(N, M, N) :- N =< M.
 between(N, M, K) :- N < M, N1 is N+1, between(N1, M, K).
 
