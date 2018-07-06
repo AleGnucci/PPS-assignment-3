@@ -87,6 +87,8 @@ double(L1, L2) :- append(L1, L1, L2).
 
 % times(List,N,List)
 % example: times([1,2,3],3,[1,2,3,1,2,3,1,2,3]).
+times(L1, 1, L1) :- !.
+times(L1, N, L2) :- M is N-1, times(L1, M, L3), append(L1, L3, L2).
 
 % proj(List,List)
 % example: proj([[1,2],[3,4],[5,6]],[1,3,5]).
