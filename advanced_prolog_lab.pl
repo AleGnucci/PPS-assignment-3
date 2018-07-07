@@ -20,6 +20,7 @@ dropAll(X,[Y|T],[Y|R]) :- dropAll(X,T,R).
 % fromCircList(+List,-Graph)
 % Obtains a graph from a circular list
 fromCircList([H|T], G) :- fromCircList2([H|T], G, H).
+% fromCircList2(+List,-Graph, @Head)
 fromCircList2([F],[e(F, H)], H).
 fromCircList2([E1,E2|T],[e(E1,E2)|L],H) :- fromCircList2([E2|T],L,H).
 
