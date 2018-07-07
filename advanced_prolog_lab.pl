@@ -6,6 +6,10 @@ dropFirst(X, [H|Xs], [H|L]) :- dropFirst(X, Xs, L).
 % dropLast(?Elem,?List,?OutList)
 % drops only the last occurrence (showing no alternative results)
 dropLast(X,L, O) :- reverse(L, LR), dropFirst(X, LR, LR1), reverse(LR1, O).
+% alternative, without the use of reverse:
+dropLast2(X, [X], []) :- !.
+dropLast2(X, [H|T], [H|T1]) :- member(X, T), dropLast2(X, T, T1), !.
+dropLast2(X, [X|T], T).
 
 % dropAll(?Elem,?List,?OutList)
 % drops all occurrences, returning a single list as result
@@ -52,36 +56,38 @@ next(T, P, R, N) :- between(0, 2, Row),
 	append(T, [cell(Row, Col, P)], N),
 	result(N, R).
 	
-%result(+Table, -Result)
+%result(@Table, -Result)
 result(T, win(P)) :- rowWin(T, P), !.
 result(T, win(P)) :- colWin(T, P), !.
 result(T, win(P)) :- diagWin(T, P), !.
 result(T, even) :- length(T, 9), !.
 result(T, nothing).
 
-%between(+Low, +High, -Value)
+%between(@Low, @High, -Value)
 %low and high are both inclusive
 between(N, M, N) :- N =< M.
 between(N, M, K) :- N < M, N1 is N+1, between(N1, M, K).
 
-%rowWin(+Table, +Player)
+%rowWin(@Table, ?Player)
 rowWin(T, P) :- between(0, 2, Row), winInRowOrCol(T, P, Row, _).
 
-%winInRowOrCol(+Table, -P, +Row, +Col)
-%to search for a win in a row, set Row as a ground term, leaving Col unbounded;
+%winInRowOrCol(@Table, ?P, ?Row, ?Col)
+%to search for a win in a row, set Row as a ground term, leaving Col unbound;
 %to search for a win in a column, do the opposite
 winInRowOrCol(T, P, Row, Col) :- (P = o; P = x), findall(count, member(cell(Row, Col, P), T), S),
 	length(S, 3),
 	member(cell(Row, Col, P), T), !. %this is needed to set P as x or o
 	
-%colWin(+Table, +Player)
+%colWin(@Table, ?Player)
 colWin(T, P) :- between(0, 2, Col), winInRowOrCol(T, P, _, Col).
 
-%diagWin(+Table, +Player)
+%diagWin(@Table, ?Player)
 diagWin(T, P) :- member(cell(1, 1, P), T), (winInDiag1(T, P) ; winInDiag2(T, P)).
-%winInDiag1(+Table, +Player)
+
+%winInDiag1(@Table, @Player)
 winInDiag1(T, P) :- findall(count, member(cell(Num, Num, P), T), S), length(S, 3).
-%winInDiag1(+Table, +Player)
+
+%winInDiag2(@Table, @Player)
 winInDiag2(T, P) :- findall(count, (between(0, 2, Row), Col is 2-Row, member(cell(Row, Col, P), T)), S), 
 	length(S, 3).
 
@@ -90,6 +96,7 @@ winInDiag2(T, P) :- findall(count, (between(0, 2, Row), Col is 2-Row, member(cel
 game(Tab, _, win(P), [Tab]) :- result(Tab, win(P)), !.
 game(Tab, _, even, [Tab]) :- result(Tab, even), !.
 game(Tab, P, R, [Tab|T]) :- next(Tab, P, R1, N), otherP(P, P1), game(N, P1, R, T).
-%other(@CurrentPlayer, @NextPlayer)
+
+%other(?CurrentPlayer, ?NextPlayer)
 otherP(x, o).
 otherP(o, x). 
