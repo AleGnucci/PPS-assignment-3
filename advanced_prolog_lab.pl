@@ -97,6 +97,6 @@ game(Tab, _, win(P), [Tab]) :- result(Tab, win(P)), !.
 game(Tab, _, even, [Tab]) :- result(Tab, even), !.
 game(Tab, P, R, [Tab|T]) :- next(Tab, P, R1, N), otherP(P, P1), game(N, P1, R, T).
 
-%other(?CurrentPlayer, ?NextPlayer)
+%otherP(?CurrentPlayer, ?NextPlayer)
 otherP(x, o).
 otherP(o, x). 
